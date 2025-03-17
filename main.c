@@ -13,17 +13,17 @@
  *  Aloca memória e verifica se deu tudo certo.
  *  A sintaxe é meio estranha, mas confia em mim.
  */
-#define ALOCAR_MEMORIA(simbolo, numero_de_elementos) \
+#define ALOCAR_MEMORIA(tipo, simbolo, numero_de_elementos) \
     do { \
         if ((numero_de_elementos) == 0) { \
             fprintf(stderr, "ERRO: alocacao de zero elementos.\n"); \
             exit(1); \
         } \
         if ((numero_de_elementos) < 0) { \
-            fprintf(stderr, "ERRO: alocacao de elemento com numero negativo.\n"); \
+            fprintf(stderr, "ERRO: alocacao de um numero negativo de elementos.\n"); \
             exit(1); \
         } \
-        simbolo = (tipo *)malloc(sizeof(*(simbolo)) * numero_de_elementos); \
+        (simbolo) = ((tipo) *)malloc(sizeof((tipo)) * (numero_de_elementos)); \
         if (simbolo == NULL) { \
             fprintf(stderr, "ERRO: falha ao alocar memoria.\n"); \
             exit(1); \
