@@ -10,3 +10,4 @@ Um sistema em C de gerenciamento básico de reservas de um hipotético hotel.
 - [x] implementar os procedimentos do *ArranjoReservas*; e
 - [ ] implementar os procedimentos do negócio.
 - [ ] implementar a interface de comando com o usuário.
+- [ ] implementar os testes.
