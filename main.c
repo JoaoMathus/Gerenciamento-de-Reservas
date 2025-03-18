@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define CAPACIDADE_INICIAL 8
+
 /**
  *  Macro para economizar linhas de códigos.
  * 
@@ -23,7 +25,7 @@
             fprintf(stderr, "ERRO: alocacao de um numero negativo de elementos.\n"); \
             exit(1); \
         } \
-        (simbolo) = ((tipo) *)malloc(sizeof((tipo)) * (numero_de_elementos)); \
+        (simbolo) = (tipo *)malloc(sizeof(tipo) * (numero_de_elementos)); \
         if (simbolo == NULL) { \
             fprintf(stderr, "ERRO: falha ao alocar memoria.\n"); \
             exit(1); \
@@ -55,7 +57,7 @@ typedef struct
 
 typedef struct
 {
-    Reserva reservas[1024];
+    Reserva *reservas;
     size_t tamanho;
     size_t capacidade;
 } arranjo_reservas;
@@ -67,38 +69,30 @@ void ordernar_reservas(arranjo_reservas *arranjo);
 
 int main()
 {
-
-    arranjo_reservas arranjo;
-    arranjo.tamanho = 0;
-    arranjo.capacidade = 1024;
-
-    arranjo.reservas[0].id = 0;
-    strcpy(arranjo.reservas[0].nomeHospede, "Alomomola");
-    arranjo.reservas[0].tipoQuarto = SINGLE;
-    strcpy(arranjo.reservas[0].dataCheckIn, "02/02/2020");
-    arranjo.reservas[0].prioridade = PADRAO;
-    arranjo.tamanho++;
-
-    arranjo.reservas[1].id = 2;
-    strcpy(arranjo.reservas[1].nomeHospede, "Travis");
-    arranjo.reservas[1].tipoQuarto = SINGLE;
-    strcpy(arranjo.reservas[1].dataCheckIn, "07/08/2021");
-    arranjo.reservas[1].prioridade = PADRAO;
-    arranjo.tamanho++;
-
-    arranjo.reservas[2].id = 1;
-    strcpy(arranjo.reservas[2].nomeHospede, "Lixo");
-    arranjo.reservas[2].tipoQuarto = SINGLE;
-    strcpy(arranjo.reservas[2].dataCheckIn, "04/05/2022");
-    arranjo.reservas[2].prioridade = PADRAO;
-    arranjo.tamanho++;
-
-    printar_todas(arranjo);
-    ordernar_reservas(&arranjo);
-    puts("-----------------------------------------------");
-    printar_todas(arranjo);
-
+    
     return 0;
+}
+
+arranjo_reservas *criar_arranjo()
+{
+    arranjo_reservas *arr;
+    ALOCAR_MEMORIA(arranjo_reservas, arr, 1);
+
+    ALOCAR_MEMORIA(Reserva, arr->reservas, CAPACIDADE_INICIAL);
+    arr->capacidade = CAPACIDADE_INICIAL;
+    arr->tamanho = 0;
+
+    return arr;
+}
+
+void destruir_arranjo(arranjo_reservas **referencia_ao_arranjo)
+{
+    if (referencia_ao_arranjo && *referencia_ao_arranjo)
+    {
+        free((*referencia_ao_arranjo)->reservas);
+        free(*referencia_ao_arranjo);
+        *referencia_ao_arranjo = NULL;
+    }
 }
 
 void printar_todas(arranjo_reservas arranjo)
