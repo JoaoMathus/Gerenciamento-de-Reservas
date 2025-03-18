@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #define CAPACIDADE_INICIAL 8
+#define CAPACIDADE_ADICIONAL 16
 
 /**
  *  Macro para economizar linhas de códigos.
@@ -82,15 +83,31 @@ typedef struct
     size_t capacidade;
 } arranjo_reservas;
 
+// AMALDIÇOADO: usando variável global para a lógica dos IDs
+static long long contador_de_id = 0;
+
 arranjo_reservas *criar_arranjo();
 void destruir_arranjo(arranjo_reservas **p_arranjo);
-void printar_todas(arranjo_reservas arranjo);
+void printar_todas(arranjo_reservas *arranjo);
 void ordernar_reservas(arranjo_reservas *arranjo);
 int comparar_reservas(Reserva *r1, Reserva *r2);
+void cadastrar_reserva(
+    arranjo_reservas *ar,
+    char *nome,
+    enum TipoQuarto tipo,
+    char *data,
+    enum Prioridade prioridade
+);
 
 int main()
 {
     arranjo_reservas *arr = criar_arranjo();
+
+    cadastrar_reserva(arr, "Alomomola", SINGLE, "02/03/2003", VIP);
+    cadastrar_reserva(arr, "Gabodor", DOUBLE, "02/03/2200", ECONOMICO);
+
+    printar_todas(arr);
+    printf("%d\n", arr->tamanho);
 
     destruir_arranjo(&arr);
     
@@ -134,11 +151,11 @@ void destruir_arranjo(arranjo_reservas **referencia_ao_arranjo)
     }
 }
 
-void printar_todas(arranjo_reservas arranjo)
+void printar_todas(arranjo_reservas *arranjo)
 {
-    for (size_t i = 0; i < arranjo.tamanho; i++)
+    for (size_t i = 0; i < arranjo->tamanho; i++)
     {
-        printf("ID: %d - Nome: %s\n", arranjo.reservas[i].id, arranjo.reservas[i].nomeHospede);
+        printf("ID: %d - Nome: %s\n", arranjo->reservas[i].id, arranjo->reservas[i].nomeHospede);
     }
 }
 
@@ -173,4 +190,48 @@ int comparar_reservas(Reserva *r1, Reserva *r2)
     if (r1->id < r2->id) return -1;
     else if (r1->id == r2->id) return 0;
     else return 1;
+}
+
+/**
+ *  Adiciona uma nova reserva no arranjo dinâmico
+ * 
+ *  Recebe: arranjo_reservas* (ponteiro/referência para o arranjo dinâmico)
+ *          const char*       (nome do hóspede)
+ *          enum TipoQuarto   (tipo do quarto: SINGLE, DOUBLE, SUITE)
+ *          const char*       (data da reserva)
+ *          enum Prioridade   (prioridade da reserva: VIP, PADRAO, ECONOMICO)
+ *  Retorna: void
+ */
+void cadastrar_reserva(
+    arranjo_reservas *ar,
+    char *nome,
+    enum TipoQuarto tipo,
+    char *data,
+    enum Prioridade prioridade)
+{
+    // Variável local pra deixar o código mais legível
+    int i;
+
+    if (ar->tamanho == ar->capacidade)
+    {
+        ar->reservas = realloc(ar->reservas, (CAPACIDADE_ADICIONAL + ar->capacidade) * sizeof(Reserva));
+        ar->capacidade += CAPACIDADE_ADICIONAL;
+    }
+
+    ar->tamanho += 1;
+    i = ar->tamanho - 1;
+    ar->reservas[i].id = contador_de_id++;
+
+    // Sendo o mais seguro possível
+    // Copiando a string nome para o campo nomeHospede
+    strncpy(ar->reservas[i].nomeHospede, nome, sizeof(ar->reservas[i].nomeHospede) - 1);
+    ar->reservas[i].nomeHospede[sizeof(ar->reservas[i].nomeHospede) - 1] = '\0';
+
+    ar->reservas[i].tipoQuarto = tipo;
+
+    // Sendo o mais seguro possível novamente
+    // Copiando a string data para o campo dataCheckIn
+    strncpy(ar->reservas[i].dataCheckIn, data, sizeof(ar->reservas[i].dataCheckIn) - 1);
+    ar->reservas[i].dataCheckIn[sizeof(ar->reservas[i].dataCheckIn) - 1] = '\0';
+    ar->reservas[i].prioridade = prioridade;
 }
