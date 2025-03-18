@@ -85,6 +85,9 @@ void ordernar_reservas(arranjo_reservas *arranjo);
 
 int main()
 {
+    arranjo_reservas *arr = criar_arranjo();
+
+    destruir_arranjo(&arr);
     
     return 0;
 }
