@@ -97,6 +97,38 @@ int main()
         printf("\033[0m");
         
         scanf("%d", &menu);
+        printf("\n");
+
+        switch(menu) {
+            case 1:
+            /*Aqui vai a função cadastrar()*/
+            printf("Não está feito.\n");
+            break;
+            
+            case 2:
+            /*Aqui vai a função buscar()*/
+            printf("Não está feito também.\n");
+            break;
+            
+            case 3:
+            /*Aqui vai a função remover()*/
+            printf("Dá pra acreditar? Não está feito.");
+            break;
+            
+            case 4:
+            printar_todas(*arr);
+            break;
+            
+            case 5:
+            ordernar_reservas(arr);
+            
+            case 6:
+            printf("Obrigado por usar nosso programa !");
+            exit(0);
+            
+            default:
+            printf("Digite um valor correto, por favor.");
+        }
     }
 
     destruir_arranjo(&arr);
