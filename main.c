@@ -14,6 +14,10 @@
  * 
  *  Aloca memória e verifica se deu tudo certo.
  *  A sintaxe é meio estranha, mas confia em mim.
+ * 
+ *  Exemplo: alocar 5 inteiros:
+ *      int *ptr;
+ *      ALOCAR_MEMORIA(int, ptr, 5);
  */
 #define ALOCAR_MEMORIA(tipo, simbolo, numero_de_elementos) \
     do { \
