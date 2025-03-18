@@ -111,35 +111,7 @@ bool remover_por_id(arranjo_reservas *arr, int id);
 int main()
 {
     arranjo_reservas *arr = criar_arranjo();
-    DataDeCheckIn data;
-
-    data.dia = 2;
-    data.mes = 3;
-    data.ano = 2003;
-    cadastrar_reserva(arr, "Alomomola", SINGLE, data, ECONOMICO);
-    data.dia = 3;
-    data.mes = 2;
-    data.ano = 2010;
-    cadastrar_reserva(arr, "Garbodor", SUITE, data, VIP);
-    data.dia = 17;
-    data.mes = 5;
-    data.ano = 2006;
-    cadastrar_reserva(arr, "Girafarig", DOUBLE, data, VIP);
-    data.dia = 2;
-    data.mes = 3;
-    data.ano = 2019;
-    cadastrar_reserva(arr, "Pikachu", SINGLE, data, PADRAO);
-
-    printar_todas(arr);
-    putchar('\n');
-
-    ordernar_reservas(arr);
-
-    printar_todas(arr);
-
-
-
-    #if 0
+    
     int menu;
     
     while (true) {
@@ -183,7 +155,6 @@ int main()
             printf("Digite um valor correto, por favor.");
         }
     }
-    #endif
     destruir_arranjo(&arr);
     
     return 0;
@@ -230,7 +201,8 @@ void printar_todas(arranjo_reservas *arranjo)
 {
     for (size_t i = 0; i < arranjo->tamanho; i++)
     {
-        printf("ID: %d - Nome: %s\n", arranjo->reservas[i].id, arranjo->reservas[i].nomeHospede);
+        printf("ID: %d - Nome: %s Data de Check-In: %d/%d/%d\n", arranjo->reservas[i].id, arranjo->reservas[i].nomeHospede,
+            arranjo->reservas[i].dataCheckIn.dia, arranjo->reservas[i].dataCheckIn.mes, arranjo->reservas[i].dataCheckIn.ano);
     }
 }
 
@@ -247,6 +219,14 @@ void ordernar_reservas(arranjo_reservas *arranjo)
         int min = i;
         for (int j = i + 1; j < arranjo->tamanho; j++)
         {
+            if (arranjo->reservas[j].prioridade == arranjo->reservas[min].prioridade)
+            {
+                if (comparar_reservas_por_data(&(arranjo->reservas[j]), &(arranjo->reservas[min])) < 0)
+                {
+                    min = j;
+                }
+            }
+
             if (arranjo->reservas[j].prioridade < arranjo->reservas[min].prioridade)
                 min = j;
         }
