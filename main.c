@@ -98,6 +98,7 @@ void cadastrar_reserva(
     char *data,
     enum Prioridade prioridade
 );
+Reserva *buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id);
 
 int main()
 {
@@ -272,4 +273,31 @@ void cadastrar_reserva(
     strncpy(ar->reservas[i].dataCheckIn, data, sizeof(ar->reservas[i].dataCheckIn) - 1);
     ar->reservas[i].dataCheckIn[sizeof(ar->reservas[i].dataCheckIn) - 1] = '\0';
     ar->reservas[i].prioridade = prioridade;
+}
+
+/**
+ *  Busca uma reserva por id usando a pesquisa binária
+ * 
+ *  Recebe: arranjo_reservas*   (ponteiro/referência a uma struct de arranjo de reservas)
+ *          int                 (índice do começo do arranjo [sempre 0 ao envocar o algoritmo])
+ *          int                 (índice do fim do arranjo [tamanho do arranjo])
+ *          int                 (id da reserva que se quer achar)
+ *  Retorna: Reserva*           (ponteiro para a reserva encontrada) ou
+ *           NULL               (se não foi encontrada reserva com o ID)
+ */
+Reserva *buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id)
+{
+    if (fim >= comeco)
+    {
+        int meio = comeco + (fim - comeco) / 2;
+
+        if (arr->reservas[meio].id == id)  // se o ID do meio é o que você procura...
+            return &(arr->reservas[meio]); // achou!
+        else if (arr->reservas[meio].id > id) // senão, se o ID do meio é maior...
+            return buscar_por_id(arr, comeco, meio - 1, id); // busca na metade esquerda
+        
+        return buscar_por_id(arr, meio + 1, fim, id); // senão, busca na metade direita
+    }
+
+    return NULL; // não há reserva com esse id
 }
