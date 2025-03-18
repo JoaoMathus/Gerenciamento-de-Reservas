@@ -87,6 +87,18 @@ int main()
 {
     arranjo_reservas *arr = criar_arranjo();
 
+    int menu;
+    
+    while (true) {
+        printf("--- SISTEMA DE GERENCIAMENTO DE RESERVAS ---\n\n");
+        printf("\033[0;34m");
+        printf("1 - Cadastre uma nova reserva\n2 - Busque uma reserva\n3 - Remova uma reserva\n");
+        printf("4 - Liste as reservas\n5 - Ordene as reservas\n6 - Encerre o programa\n");
+        printf("\033[0m");
+        
+        scanf("%d", &menu);
+    }
+
     destruir_arranjo(&arr);
     
     return 0;
