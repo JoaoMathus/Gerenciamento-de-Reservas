@@ -103,11 +103,49 @@ int main()
 {
     arranjo_reservas *arr = criar_arranjo();
 
-    cadastrar_reserva(arr, "Alomomola", SINGLE, "02/03/2003", VIP);
-    cadastrar_reserva(arr, "Gabodor", DOUBLE, "02/03/2200", ECONOMICO);
+    int menu;
+    
+    while (true) {
+        printf("--- SISTEMA DE GERENCIAMENTO DE RESERVAS ---\n\n");
+        printf("\033[0;34m");
+        printf("1 - Cadastre uma nova reserva\n2 - Busque uma reserva\n3 - Remova uma reserva\n");
+        printf("4 - Liste as reservas\n5 - Ordene as reservas\n6 - Encerre o programa\n");
+        printf("\033[0m");
+        
+        scanf("%d", &menu);
+        printf("\n");
 
-    printar_todas(arr);
-    printf("%d\n", arr->tamanho);
+        switch(menu) {
+            case 1:
+            /*Aqui vai a função cadastrar()*/
+            printf("Não está feito.\n");
+            break;
+            
+            case 2:
+            /*Aqui vai a função buscar()*/
+            printf("Não está feito também.\n");
+            break;
+            
+            case 3:
+            /*Aqui vai a função remover()*/
+            printf("Dá pra acreditar? Não está feito.");
+            break;
+            
+            case 4:
+            printar_todas(arr);
+            break;
+            
+            case 5:
+            ordernar_reservas(arr);
+            
+            case 6:
+            printf("Obrigado por usar nosso programa !");
+            exit(0);
+            
+            default:
+            printf("Digite um valor correto, por favor.");
+        }
+    }
 
     destruir_arranjo(&arr);
     
