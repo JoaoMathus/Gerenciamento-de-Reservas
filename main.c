@@ -90,7 +90,7 @@ arranjo_reservas *criar_arranjo();
 void destruir_arranjo(arranjo_reservas **p_arranjo);
 void printar_todas(arranjo_reservas *arranjo);
 void ordernar_reservas(arranjo_reservas *arranjo);
-int comparar_reservas(Reserva *r1, Reserva *r2);
+int comparar_reservas_por_data(Reserva *r1, Reserva *r2);
 void cadastrar_reserva(
     arranjo_reservas *ar,
     char *nome,
@@ -105,6 +105,19 @@ int main()
 {
     arranjo_reservas *arr = criar_arranjo();
 
+    cadastrar_reserva(arr, "Alomomola", SINGLE, "02/03/2003", ECONOMICO);
+    cadastrar_reserva(arr, "Garbodor", SUITE, "02/03/2003", VIP);
+    cadastrar_reserva(arr, "Girafarig", DOUBLE, "02/03/2003", VIP);
+    cadastrar_reserva(arr, "Pikachu", SINGLE, "02/03/2033", PADRAO);
+
+    printar_todas(arr);
+    putchar('\n');
+
+    ordernar_reservas(arr);
+
+    printar_todas(arr);
+
+    #if 0
     int menu;
     
     while (true) {
@@ -148,7 +161,7 @@ int main()
             printf("Digite um valor correto, por favor.");
         }
     }
-
+    #endif
     destruir_arranjo(&arr);
     
     return 0;
@@ -212,7 +225,7 @@ void ordernar_reservas(arranjo_reservas *arranjo)
         int min = i;
         for (int j = i + 1; j < arranjo->tamanho; j++)
         {
-            if (arranjo->reservas[j].id < arranjo->reservas[min].id)
+            if (arranjo->reservas[j].prioridade < arranjo->reservas[min].prioridade)
                 min = j;
         }
         Reserva temp = arranjo->reservas[i];
@@ -221,9 +234,8 @@ void ordernar_reservas(arranjo_reservas *arranjo)
     }
 }
 
-// TODO: Modificar essa função para comparar prioridade ou data.
 /**
- *  Compara duas reservas com base no ID
+ *  Compara duas reservas com base na data de check-in
  * 
  *  Recebe: Reserva* (ponteiro/referência a uma struct Reserva)
  *          Reserva* (ponteiro/referência a uma struct Reserva)
@@ -231,11 +243,9 @@ void ordernar_reservas(arranjo_reservas *arranjo)
  *                    int == 0 -> r1 é igual a r2,
  *                    int > 0 => r1 é maior que r2)
  */
-int comparar_reservas(Reserva *r1, Reserva *r2)
+int comparar_reservas_por_data(Reserva *r1, Reserva *r2)
 {
-    if (r1->id < r2->id) return -1;
-    else if (r1->id == r2->id) return 0;
-    else return 1;
+    return 0;
 }
 
 /**
