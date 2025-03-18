@@ -86,6 +86,7 @@ arranjo_reservas *criar_arranjo();
 void destruir_arranjo(arranjo_reservas **p_arranjo);
 void printar_todas(arranjo_reservas arranjo);
 void ordernar_reservas(arranjo_reservas *arranjo);
+int comparar_reservas(Reserva *r1, Reserva *r2);
 
 int main()
 {
@@ -155,4 +156,21 @@ void ordernar_reservas(arranjo_reservas *arranjo)
         arranjo->reservas[i] = arranjo->reservas[min];
         arranjo->reservas[min] = temp;
     }
+}
+
+// TODO: Modificar essa função para comparar prioridade ou data.
+/**
+ *  Compara duas reservas com base no ID
+ * 
+ *  Recebe: Reserva* (ponteiro/referência a uma struct Reserva)
+ *          Reserva* (ponteiro/referência a uma struct Reserva)
+ *  Retorna: int     (int < 0 => r1 é menor que r2,
+ *                    int == 0 -> r1 é igual a r2,
+ *                    int > 0 => r1 é maior que r2)
+ */
+int comparar_reservas(Reserva *r1, Reserva *r2)
+{
+    if (r1->id < r2->id) return -1;
+    else if (r1->id == r2->id) return 0;
+    else return 1;
 }
