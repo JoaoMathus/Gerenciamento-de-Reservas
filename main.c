@@ -199,6 +199,12 @@ void printar_todas(arranjo_reservas *arranjo)
     }
 }
 
+/**
+ *  Ordena reservas pela prioridade, e se forem iguais, ordena pela data de check-in
+ * 
+ *  Recebe: arranjo_reservas*   (ponteiro/referência a uma struct arranjo_reservas)
+ *  Retorna: void
+ */
 void ordernar_reservas(arranjo_reservas *arranjo)
 {
     for (int i = 0; i < arranjo->tamanho - 1; i++)
