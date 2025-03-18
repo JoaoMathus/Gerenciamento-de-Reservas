@@ -99,6 +99,7 @@ void cadastrar_reserva(
     enum Prioridade prioridade
 );
 Reserva *buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id);
+bool remover_por_id(arranjo_reservas *arr, int id);
 
 int main()
 {
@@ -300,4 +301,36 @@ Reserva *buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id)
     }
 
     return NULL; // não há reserva com esse id
+}
+
+/**
+ *  Remove uma reserva do arranjo dinâmico
+ * 
+ *  Recebe: arranjo_reservas*   (ponteiro/referência à estrutura arranjo_reservas)
+ *          int                 (id da reserva que se quer remover)
+ *  Retorna: bool               (true se deu certo, false se não há esse elemento)
+ */
+bool remover_por_id(arranjo_reservas *arr, int id)
+{
+    // Se está na última posição
+    if (arr->reservas[arr->tamanho - 1].id == id)
+    {
+        arr->tamanho--; // simplesmente decresce o tamanho
+        return true;
+    }
+    // Se está entre o primeiro e o penúltimo
+    for (int i = 0; i < arr->tamanho; i++)
+    {
+        if (arr->reservas[i].id == id)
+        {
+            for (int j = i; j < arr->tamanho - 1; j++)
+            {
+                arr->reservas[j] = arr->reservas[j + 1]; // mudando o que resta para a esquerda
+            }
+            arr->tamanho--;
+            return true;
+        }
+    }
+
+    return false; // caso último: não há esse elemento
 }
