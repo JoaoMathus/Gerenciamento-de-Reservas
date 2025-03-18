@@ -51,6 +51,13 @@ enum Prioridade
     ECONOMICO
 };
 
+typedef struct
+{
+    int dia;
+    int mes;
+    int ano;
+} DataDeCheckIn;
+
 /**
  *  Registro de reserva
  * 
@@ -65,7 +72,7 @@ typedef struct
     int id;
     char nomeHospede[124];
     enum TipoQuarto tipoQuarto;
-    char dataCheckIn[124];
+    DataDeCheckIn dataCheckIn;
     enum Prioridade prioridade;
 } Reserva;
 
@@ -95,7 +102,7 @@ void cadastrar_reserva(
     arranjo_reservas *ar,
     char *nome,
     enum TipoQuarto tipo,
-    char *data,
+    DataDeCheckIn data,
     enum Prioridade prioridade
 );
 Reserva *buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id);
@@ -104,11 +111,24 @@ bool remover_por_id(arranjo_reservas *arr, int id);
 int main()
 {
     arranjo_reservas *arr = criar_arranjo();
+    DataDeCheckIn data;
 
-    cadastrar_reserva(arr, "Alomomola", SINGLE, "02/03/2003", ECONOMICO);
-    cadastrar_reserva(arr, "Garbodor", SUITE, "02/03/2003", VIP);
-    cadastrar_reserva(arr, "Girafarig", DOUBLE, "02/03/2003", VIP);
-    cadastrar_reserva(arr, "Pikachu", SINGLE, "02/03/2033", PADRAO);
+    data.dia = 2;
+    data.mes = 3;
+    data.ano = 2003;
+    cadastrar_reserva(arr, "Alomomola", SINGLE, data, ECONOMICO);
+    data.dia = 3;
+    data.mes = 2;
+    data.ano = 2010;
+    cadastrar_reserva(arr, "Garbodor", SUITE, data, VIP);
+    data.dia = 17;
+    data.mes = 5;
+    data.ano = 2006;
+    cadastrar_reserva(arr, "Girafarig", DOUBLE, data, VIP);
+    data.dia = 2;
+    data.mes = 3;
+    data.ano = 2019;
+    cadastrar_reserva(arr, "Pikachu", SINGLE, data, PADRAO);
 
     printar_todas(arr);
     putchar('\n');
@@ -116,6 +136,8 @@ int main()
     ordernar_reservas(arr);
 
     printar_todas(arr);
+
+
 
     #if 0
     int menu;
@@ -245,7 +267,34 @@ void ordernar_reservas(arranjo_reservas *arranjo)
  */
 int comparar_reservas_por_data(Reserva *r1, Reserva *r2)
 {
-    return 0;
+    if (r1->dataCheckIn.ano < r2->dataCheckIn.ano)
+    {
+        return -1;
+    }
+    if (r1->dataCheckIn.ano > r2->dataCheckIn.ano)
+    {
+        return 1;
+    }
+
+    if (r1->dataCheckIn.mes < r2->dataCheckIn.mes)
+    {
+        return -1;
+    }
+    if (r1->dataCheckIn.mes > r2->dataCheckIn.mes)
+    {
+        return 1;
+    }
+
+    if (r1->dataCheckIn.dia < r2->dataCheckIn.dia)
+    {
+        return -1;
+    }
+    if (r1->dataCheckIn.dia > r2->dataCheckIn.dia)
+    {
+        return 1;
+    }
+    
+    return 0; // são iguais
 }
 
 /**
@@ -262,7 +311,7 @@ void cadastrar_reserva(
     arranjo_reservas *ar,
     char *nome,
     enum TipoQuarto tipo,
-    char *data,
+    DataDeCheckIn data,
     enum Prioridade prioridade)
 {
     // Variável local pra deixar o código mais legível
@@ -285,10 +334,7 @@ void cadastrar_reserva(
 
     ar->reservas[i].tipoQuarto = tipo;
 
-    // Sendo o mais seguro possível novamente
-    // Copiando a string data para o campo dataCheckIn
-    strncpy(ar->reservas[i].dataCheckIn, data, sizeof(ar->reservas[i].dataCheckIn) - 1);
-    ar->reservas[i].dataCheckIn[sizeof(ar->reservas[i].dataCheckIn) - 1] = '\0';
+    ar->reservas[i].dataCheckIn = data;
     ar->reservas[i].prioridade = prioridade;
 }
 
