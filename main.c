@@ -46,6 +46,15 @@ enum Prioridade
     ECONOMICO
 };
 
+/**
+ *  Registro de reserva
+ * 
+ *  Campos: id,
+ *          nome do hóspede que fez a reserva,
+ *          tipo do quarto reservado,
+ *          data na qual o check-in foi feito,
+ *          prioridade do hóspede.
+ */
 typedef struct
 {
     int id;
@@ -55,6 +64,13 @@ typedef struct
     enum Prioridade prioridade;
 } Reserva;
 
+/**
+ *  Registro para um arranjo dinâmico de reservas
+ * 
+ *  Campos: um arranjo dinâmico para as reservas,
+ *          tamanho atual do arranjo,
+ *          capicade máxima atual do arranjo.
+ */
 typedef struct
 {
     Reserva *reservas;
@@ -73,25 +89,40 @@ int main()
     return 0;
 }
 
+/**
+ *  Cria um novo arranjo alocando memória para ele e para
+ *  o arranjo interior.
+ * 
+ *  Recebe: void
+ *  Retorna: arranjo_reservas* (um ponteiro para o arranjo alocado).
+ */
 arranjo_reservas *criar_arranjo()
 {
     arranjo_reservas *arr;
-    ALOCAR_MEMORIA(arranjo_reservas, arr, 1);
+    ALOCAR_MEMORIA(arranjo_reservas, arr, 1); // alocando a estrutura que encapsula o arranjo
 
-    ALOCAR_MEMORIA(Reserva, arr->reservas, CAPACIDADE_INICIAL);
-    arr->capacidade = CAPACIDADE_INICIAL;
-    arr->tamanho = 0;
+    ALOCAR_MEMORIA(Reserva, arr->reservas, CAPACIDADE_INICIAL); // alocando o arranjo em si
+    
+    /* Preenchendo os dados da estrutura */
+    arr->capacidade = CAPACIDADE_INICIAL; // capacidade máxima atual
+    arr->tamanho = 0; // tamanho atual
 
     return arr;
 }
 
+/**
+ *  Libera memória alocada para um arranjo de reservas.
+ * 
+ *  Recebe: arranjo_reservas** (ponteiro para um ponteiro para o arranjo).
+ *  Retorna: void
+ */
 void destruir_arranjo(arranjo_reservas **referencia_ao_arranjo)
 {
     if (referencia_ao_arranjo && *referencia_ao_arranjo)
     {
         free((*referencia_ao_arranjo)->reservas);
         free(*referencia_ao_arranjo);
-        *referencia_ao_arranjo = NULL;
+        *referencia_ao_arranjo = NULL; // evitar acesso após o free()
     }
 }
 
