@@ -148,8 +148,10 @@ int main()
             break;
             
             case 2:
-            /*Aqui vai a função buscar()*/
-            printf("Não está feito também.\n");
+            int search;
+            printf("\nInsira o número do ID que quer procurar: ");
+            scanf("%d", &search);
+            buscar_por_id(arr, 0, arr->tamanho, search);
             break;
             
             case 3:
