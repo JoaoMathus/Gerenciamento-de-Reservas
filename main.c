@@ -240,6 +240,7 @@ void printar_todas(arranjo_reservas *arranjo)
             case 3:
                 printf("ECONOMICO\n");
                 break;
+        }
     }
 }
 
