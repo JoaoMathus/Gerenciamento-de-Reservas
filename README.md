@@ -9,5 +9,5 @@ Um sistema em C de gerenciamento básico de reservas de um hipotético hotel.
 - [x] implementar o procedimento `reserva_comparar()`;
 - [x] implementar os procedimentos do *ArranjoReservas*; e
 - [x] implementar os procedimentos do negócio.
-- [ ] implementar a interface de comando com o usuário.
-- [ ] modificar o ordenamento, em vez de id, ordenar por prioridade ou data. E usar o procedimento comparar_reservas() para isso.
+- [x] implementar a interface de comando com o usuário.
+- [x] modificar o ordenamento, em vez de id, ordenar por prioridade ou data. E usar o procedimento comparar_reservas() para isso.
