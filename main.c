@@ -149,9 +149,25 @@ int main()
             
             case 2:
             int search;
-            printf("\nInsira o número do ID que quer procurar: ");
+            printf("\nInsira o numero do ID que quer procurar: ");
             scanf("%d", &search);
-            buscar_por_id(arr, 0, arr->tamanho, search);
+            Reserva *r = buscar_por_id(arr, 0, arr->tamanho, search);
+            if (r == NULL)
+                puts("Reserva nao encontrada");
+            else
+            printf("ID: %d - Nome: %s Data de Check-In: %d/%d/%d - Prioridade: ", r->id, r->nomeHospede,
+                r->dataCheckIn.dia, r->dataCheckIn.mes, r->dataCheckIn.ano);
+            switch(r->prioridade) {
+                case 1:
+                    printf("VIP\n");
+                    break;
+                case 2:
+                    printf("PADRAO\n");
+                    break;
+                case 3:
+                    printf("ECONOMICO\n");
+                    break;
+            }
             break;
             
             case 3:
