@@ -122,12 +122,29 @@ int main()
         printf("\033[0m");
         
         scanf("%d", &menu);
-        printf("\n");
+        getchar();
 
         switch(menu) {
             case 1:
-            /*Aqui vai a função cadastrar()*/
-            printf("Não está feito.\n");
+            char nome[124];
+            printf("\nInsira o nome do hospede: ");
+            fgets(nome, sizeof(nome), stdin);
+            if ((strlen(nome) > 0) && (nome[strlen (nome) - 1] == '\n'))
+                nome[strlen (nome) -1] = '\0';
+            int quarto;
+            printf("\nInsira o tipo do quarto (SINGLE = 0, DOUBLE = 1, SUITE = 2): ");
+            scanf("%d", &quarto);
+            DataDeCheckIn check;
+            printf("\nInsira o dia de check in: ");
+            scanf("%d", &check.dia);
+            printf("\nInsira o mês de check in: ");
+            scanf("%d", &check.mes);
+            printf("\nInsira o ano de check in: ");
+            scanf("%d", &check.ano);
+            int prio;
+            printf("\nInsira a prioridade de atendimento do hospede (VIP = 1, PADRAO = 2, ECONOMICO = 3): ");
+            scanf("%d", &prio);
+            cadastrar_reserva(arr, nome, quarto, check, prio);
             break;
             
             case 2:
