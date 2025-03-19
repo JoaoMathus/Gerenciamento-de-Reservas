@@ -155,8 +155,15 @@ int main()
             break;
             
             case 3:
-            /*Aqui vai a função remover()*/
-            printf("Dá pra acreditar? Não está feito.");
+            int removv;
+            printf("\nInsira o número do ID que quer remover: ");
+            scanf("%d", &removv);
+            if (remover_por_id(arr, removv)) {
+                printf("Removido com sucesso !\n");
+            }
+            else {
+                printf("Hospede não foi removido. Digite o ID novamente.\n");
+            }
             break;
             
             case 4:
@@ -165,6 +172,7 @@ int main()
             
             case 5:
             ordernar_reservas(arr);
+            break;
             
             case 6:
             printf("Obrigado por usar nosso programa !");
