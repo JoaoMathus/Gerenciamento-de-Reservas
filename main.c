@@ -228,8 +228,18 @@ void printar_todas(arranjo_reservas *arranjo)
 {
     for (size_t i = 0; i < arranjo->tamanho; i++)
     {
-        printf("ID: %d - Nome: %s Data de Check-In: %d/%d/%d\n", arranjo->reservas[i].id, arranjo->reservas[i].nomeHospede,
+        printf("ID: %d - Nome: %s Data de Check-In: %d/%d/%d - Prioridade: ", arranjo->reservas[i].id, arranjo->reservas[i].nomeHospede,
             arranjo->reservas[i].dataCheckIn.dia, arranjo->reservas[i].dataCheckIn.mes, arranjo->reservas[i].dataCheckIn.ano);
+        switch(arranjo->reservas[i].prioridade) {
+            case 1:
+                printf("VIP\n");
+                break;
+            case 2:
+                printf("PADRAO\n");
+                break;
+            case 3:
+                printf("ECONOMICO\n");
+                break;
     }
 }
 
