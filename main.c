@@ -105,7 +105,7 @@ void cadastrar_reserva(
     DataDeCheckIn data,
     enum Prioridade prioridade
 );
-Reserva *buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id);
+Reserva *buscar_por_id(arranjo_reservas *arr, int id);
 bool remover_por_id(arranjo_reservas *arr, int id);
 
 int main()
@@ -151,7 +151,7 @@ int main()
             int search;
             printf("\nInsira o numero do ID que quer procurar: ");
             scanf("%d", &search);
-            Reserva *r = buscar_por_id(arr, 0, arr->tamanho, search);
+            Reserva *r = buscar_por_id(arr, search);
             if (r == NULL)
                 puts("Reserva nao encontrada");
             else
@@ -373,27 +373,21 @@ void cadastrar_reserva(
 }
 
 /**
- *  Busca uma reserva por id usando a pesquisa binária
+ *  Busca uma reserva por id
  * 
  *  Recebe: arranjo_reservas*   (ponteiro/referência a uma struct de arranjo de reservas)
- *          int                 (índice do começo do arranjo [sempre 0 ao envocar o algoritmo])
- *          int                 (índice do fim do arranjo [tamanho do arranjo])
  *          int                 (id da reserva que se quer achar)
  *  Retorna: Reserva*           (ponteiro para a reserva encontrada) ou
  *           NULL               (se não foi encontrada reserva com o ID)
  */
-Reserva *buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id)
+Reserva *buscar_por_id(arranjo_reservas *arr, int id)
 {
-    if (fim >= comeco)
+    for (int i = 0; i < arr->tamanho; i++)
     {
-        int meio = comeco + (fim - comeco) / 2;
-
-        if (arr->reservas[meio].id == id)  // se o ID do meio é o que você procura...
-            return &(arr->reservas[meio]); // achou!
-        else if (arr->reservas[meio].id > id) // senão, se o ID do meio é maior...
-            return buscar_por_id(arr, comeco, meio - 1, id); // busca na metade esquerda
-        
-        return buscar_por_id(arr, meio + 1, fim, id); // senão, busca na metade direita
+        if (arr->reservas[i].id == id)
+        {
+            return &(arr->reservas[i]);
+        }
     }
 
     return NULL; // não há reserva com esse id
