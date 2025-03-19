@@ -11,3 +11,5 @@ Um sistema em C de gerenciamento básico de reservas de um hipotético hotel.
 - [x] implementar os procedimentos do negócio.
 - [x] implementar a interface de comando com o usuário.
 - [x] modificar o ordenamento, em vez de id, ordenar por prioridade ou data. E usar o procedimento comparar_reservas() para isso.
+- [ ] implementar testes.
+- [ ] reorganizar o projeto.
