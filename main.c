@@ -1,42 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h> /* será inutilizada no projeto */
-// #include <stdint.h> usar os int dessa biblioteca
-
-#define CAPACIDADE_INICIAL 8
-#define CAPACIDADE_ADICIONAL 16
-
-/**
- *  Macro para economizar linhas de códigos.
- * 
- *  Parâmetros: o tipo do que vai ser alocado,
- *              o símbolo (variável) ponteiro,
- *              número de elementos para alocar.
- * 
- *  Aloca memória e verifica se deu tudo certo.
- *  A sintaxe é meio estranha, mas confia em mim.
- * 
- *  Exemplo: alocar 5 inteiros:
- *      int *ptr;
- *      ALOCAR_MEMORIA(int, ptr, 5);
- */
-#define ALOCAR_MEMORIA(tipo, simbolo, numero_de_elementos) \
-    do { \
-        if ((numero_de_elementos) == 0) { \
-            fprintf(stderr, "ERRO: alocacao de zero elementos.\n"); \
-            exit(1); \
-        } \
-        if ((numero_de_elementos) < 0) { \
-            fprintf(stderr, "ERRO: alocacao de um numero negativo de elementos.\n"); \
-            exit(1); \
-        } \
-        (simbolo) = (tipo *)malloc(sizeof(tipo) * (numero_de_elementos)); \
-        if (simbolo == NULL) { \
-            fprintf(stderr, "ERRO: falha ao alocar memoria.\n"); \
-            exit(1); \
-        } \
-    } while (0)
 
 enum TipoQuarto
 {
