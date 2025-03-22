@@ -2,13 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "data.h"           /* para data_t */
+#include "vetor_reservas.h" /* para vetor_reservas_t, e todos os procedimentos */
+
 int main()
 {
-    arranjo_reservas *arr = criar_arranjo();
+    vetor_reservas_t* arr = vetor_criar();
     
     int menu;
     
-    while (true) {
+    for (;;) {
         printf("--- SISTEMA DE GERENCIAMENTO DE RESERVAS ---\n\n");
         printf("\033[0;34m");
         printf("1 - Cadastre uma nova reserva\n2 - Busque uma reserva\n3 - Remova uma reserva\n");
@@ -19,80 +22,98 @@ int main()
         getchar();
 
         switch(menu) {
-            case 1:
-            char nome[124];
-            printf("\nInsira o nome do hospede: ");
-            fgets(nome, sizeof(nome), stdin);
-            if ((strlen(nome) > 0) && (nome[strlen (nome) - 1] == '\n'))
-                nome[strlen (nome) -1] = '\0';
-            int quarto;
-            printf("\nInsira o tipo do quarto (SINGLE = 0, DOUBLE = 1, SUITE = 2): ");
-            scanf("%d", &quarto);
-            DataDeCheckIn check;
-            printf("\nInsira o dia de check in: ");
-            scanf("%d", &check.dia);
-            printf("\nInsira o mês de check in: ");
-            scanf("%d", &check.mes);
-            printf("\nInsira o ano de check in: ");
-            scanf("%d", &check.ano);
-            int prio;
-            printf("\nInsira a prioridade de atendimento do hospede (VIP = 1, PADRAO = 2, ECONOMICO = 3): ");
-            scanf("%d", &prio);
-            cadastrar_reserva(arr, nome, quarto, check, prio);
-            break;
+            case 1: {
+                char nome[128];
+                int quarto;
+                data_t checkin;
+                int prio;
+
+                printf("\nInsira o nome do hospede: ");
+                fgets(nome, sizeof(nome), stdin);
+                if ((strlen(nome) > 0) && (nome[strlen (nome) - 1] == '\n'))
+                    nome[strlen (nome) - 1] = '\0';
+                
+                printf("\nInsira o tipo do quarto (SINGLE = 0, DOUBLE = 1, SUITE = 2): ");
+                scanf("%d", &quarto);
+
+                printf("\nInsira o dia de check in: ");
+                scanf("%d", &checkin.dia);
+
+                printf("\nInsira o mes de check in: ");
+                scanf("%d", &checkin.mes);
+
+                printf("\nInsira o ano de check in: ");
+                scanf("%d", &checkin.ano);
+
+                printf("\nInsira a prioridade de atendimento do hospede (VIP = 1, PADRAO = 2, ECONOMICO = 3): ");
+                scanf("%d", &prio);
+
+                vetor_adicionar(arr, nome, checkin, quarto, prio);
+                break;
+            }
             
-            case 2:
-            int search;
-            printf("\nInsira o numero do ID que quer procurar: ");
-            scanf("%d", &search);
-            Reserva *r = buscar_por_id(arr, 0, arr->tamanho, search);
-            if (r == NULL)
-                puts("Reserva nao encontrada");
-            else
-            printf("ID: %d - Nome: %s Data de Check-In: %d/%d/%d - Prioridade: ", r->id, r->nomeHospede,
-                r->dataCheckIn.dia, r->dataCheckIn.mes, r->dataCheckIn.ano);
-            switch(r->prioridade) {
-                case 1:
-                    printf("VIP\n");
-                    break;
-                case 2:
-                    printf("PADRAO\n");
-                    break;
-                case 3:
-                    printf("ECONOMICO\n");
-                    break;
+            case 2: {
+                int search;
+                reserva_t* r;
+
+                printf("\nInsira o numero do ID que quer procurar: ");
+                scanf("%d", &search);
+
+                r = vetor_buscar(arr, search);
+                if (r == NULL) {
+                    puts("Reserva nao encontrada.");
+                } else {
+                    printf("ID: %d - Nome: %s Data de Check-In: %d/%d/%d - Prioridade: ", r->id, r->nome_hospede,
+                           r->data_checkin.dia, r->data_checkin.mes, r->data_checkin.ano);
+                }
+
+                switch(r->prioridade) {
+                    case 1:
+                        printf("VIP\n");
+                        break;
+                    case 2:
+                        printf("PADRAO\n");
+                        break;
+                    case 3:
+                        printf("ECONOMICO\n");
+                        break;
+                }
+                break;
             }
-            break;
             
-            case 3:
-            int removv;
-            printf("\nInsira o número do ID que quer remover: ");
-            scanf("%d", &removv);
-            if (remover_por_id(arr, removv)) {
-                printf("Removido com sucesso !\n");
+            case 3: {
+                int removv;
+
+                printf("\nInsira o numero do ID que quer remover: ");
+                scanf("%d", &removv);
+
+                if (vetor_remover(arr, removv)) {
+                    printf("Removido com sucesso !\n");
+                }
+                else {
+                    printf("Hospede nao foi encontrado. Tente outro ID.\n");
+                }
+                break;
             }
-            else {
-                printf("Hospede não foi removido. Digite o ID novamente.\n");
-            }
-            break;
             
             case 4:
-            printar_todas(arr);
-            break;
+                vetor_listar(arr);
+                break;
             
             case 5:
-            ordernar_reservas(arr);
-            break;
+                vetor_ordenar(arr);
+                break;
             
             case 6:
-            printf("Obrigado por usar nosso programa !");
-            exit(0);
+                printf("Obrigado por usar nosso programa !");
+                exit(0);
             
             default:
-            printf("Digite um valor correto, por favor.");
+                printf("Digite um valor correto, por favor.");
+                break;
         }
     }
-    destruir_arranjo(&arr);
+    vetor_destruir(&arr);
     
     return 0;
 }
