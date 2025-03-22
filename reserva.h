@@ -9,14 +9,6 @@
 
 #include "data.h" /* para data_t */
 
-typedef struct reserva {
-    int id;
-    char nome_hospede[64];
-    data_t data_checkin;
-    prioridade_t prioridade;
-    tipo_quarto_t tipo_quarto;
-} reserva_t;
-
 typedef enum prioridade {
     VIP = 1,
     PADRAO,
@@ -28,5 +20,13 @@ typedef enum tipo_quarto {
     DUPLO,
     SUITE
 } tipo_quarto_t;
+
+typedef struct reserva {
+    int id;
+    char nome_hospede[64];
+    data_t data_checkin;
+    prioridade_t prioridade;
+    tipo_quarto_t tipo_quarto;
+} reserva_t;
 
 #endif /* RESERVA_H */
