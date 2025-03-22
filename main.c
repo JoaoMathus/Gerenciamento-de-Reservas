@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+#include <stdbool.h> /* será inutilizada no projeto */
+// #include <stdint.h> usar os int dessa biblioteca
 
 #define CAPACIDADE_INICIAL 8
 #define CAPACIDADE_ADICIONAL 16
@@ -93,7 +94,7 @@ typedef struct
 // AMALDIÇOADO: usando variável global para a lógica dos IDs
 static long long contador_de_id = 0;
 
-arranjo_reservas *criar_arranjo();
+arranjo_reservas* criar_arranjo();
 void destruir_arranjo(arranjo_reservas **p_arranjo);
 void printar_todas(arranjo_reservas *arranjo);
 void ordernar_reservas(arranjo_reservas *arranjo);
@@ -105,7 +106,7 @@ void cadastrar_reserva(
     DataDeCheckIn data,
     enum Prioridade prioridade
 );
-Reserva *buscar_por_id(arranjo_reservas *arr, int id);
+Reserva* buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id);
 bool remover_por_id(arranjo_reservas *arr, int id);
 
 int main()
@@ -151,7 +152,7 @@ int main()
             int search;
             printf("\nInsira o numero do ID que quer procurar: ");
             scanf("%d", &search);
-            Reserva *r = buscar_por_id(arr, search);
+            Reserva *r = buscar_por_id(arr, 0, arr->tamanho, search);
             if (r == NULL)
                 puts("Reserva nao encontrada");
             else
@@ -210,7 +211,8 @@ int main()
  *  Recebe: void
  *  Retorna: arranjo_reservas* (um ponteiro para o arranjo alocado).
  */
-arranjo_reservas *criar_arranjo()
+arranjo_reservas*
+criar_arranjo()
 {
     arranjo_reservas *arr;
     ALOCAR_MEMORIA(arranjo_reservas, arr, 1); // alocando a estrutura que encapsula o arranjo
@@ -230,7 +232,8 @@ arranjo_reservas *criar_arranjo()
  *  Recebe: arranjo_reservas** (ponteiro para um ponteiro para o arranjo).
  *  Retorna: void
  */
-void destruir_arranjo(arranjo_reservas **referencia_ao_arranjo)
+void
+destruir_arranjo(arranjo_reservas **referencia_ao_arranjo)
 {
     if (referencia_ao_arranjo && *referencia_ao_arranjo)
     {
@@ -240,7 +243,8 @@ void destruir_arranjo(arranjo_reservas **referencia_ao_arranjo)
     }
 }
 
-void printar_todas(arranjo_reservas *arranjo)
+void
+printar_todas(arranjo_reservas *arranjo)
 {
     for (size_t i = 0; i < arranjo->tamanho; i++)
     {
@@ -266,7 +270,8 @@ void printar_todas(arranjo_reservas *arranjo)
  *  Recebe: arranjo_reservas*   (ponteiro/referência a uma struct arranjo_reservas)
  *  Retorna: void
  */
-void ordernar_reservas(arranjo_reservas *arranjo)
+void
+ordernar_reservas(arranjo_reservas *arranjo)
 {
     for (int i = 0; i < arranjo->tamanho - 1; i++)
     {
@@ -299,7 +304,8 @@ void ordernar_reservas(arranjo_reservas *arranjo)
  *                    int == 0 -> r1 é igual a r2,
  *                    int > 0 => r1 é maior que r2)
  */
-int comparar_reservas_por_data(Reserva *r1, Reserva *r2)
+int
+comparar_reservas_por_data(Reserva *r1, Reserva *r2)
 {
     if (r1->dataCheckIn.ano < r2->dataCheckIn.ano)
     {
@@ -341,7 +347,8 @@ int comparar_reservas_por_data(Reserva *r1, Reserva *r2)
  *          enum Prioridade   (prioridade da reserva: VIP, PADRAO, ECONOMICO)
  *  Retorna: void
  */
-void cadastrar_reserva(
+void
+cadastrar_reserva(
     arranjo_reservas *ar,
     char *nome,
     enum TipoQuarto tipo,
@@ -373,21 +380,28 @@ void cadastrar_reserva(
 }
 
 /**
- *  Busca uma reserva por id
+ *  Busca uma reserva por id usando a pesquisa binária
  * 
  *  Recebe: arranjo_reservas*   (ponteiro/referência a uma struct de arranjo de reservas)
+ *          int                 (índice do começo do arranjo [sempre 0 ao envocar o algoritmo])
+ *          int                 (índice do fim do arranjo [tamanho do arranjo])
  *          int                 (id da reserva que se quer achar)
  *  Retorna: Reserva*           (ponteiro para a reserva encontrada) ou
  *           NULL               (se não foi encontrada reserva com o ID)
  */
-Reserva *buscar_por_id(arranjo_reservas *arr, int id)
+Reserva*
+buscar_por_id(arranjo_reservas *arr, int comeco, int fim, int id)
 {
-    for (int i = 0; i < arr->tamanho; i++)
+    if (fim >= comeco)
     {
-        if (arr->reservas[i].id == id)
-        {
-            return &(arr->reservas[i]);
-        }
+        int meio = comeco + (fim - comeco) / 2;
+
+        if (arr->reservas[meio].id == id)  // se o ID do meio é o que você procura...
+            return &(arr->reservas[meio]); // achou!
+        else if (arr->reservas[meio].id > id) // senão, se o ID do meio é maior...
+            return buscar_por_id(arr, comeco, meio - 1, id); // busca na metade esquerda
+        
+        return buscar_por_id(arr, meio + 1, fim, id); // senão, busca na metade direita
     }
 
     return NULL; // não há reserva com esse id
@@ -400,7 +414,8 @@ Reserva *buscar_por_id(arranjo_reservas *arr, int id)
  *          int                 (id da reserva que se quer remover)
  *  Retorna: bool               (true se deu certo, false se não há esse elemento)
  */
-bool remover_por_id(arranjo_reservas *arr, int id)
+bool
+remover_por_id(arranjo_reservas *arr, int id)
 {
     // Se está na última posição
     if (arr->reservas[arr->tamanho - 1].id == id)
