@@ -5,33 +5,25 @@
 #include "data.h"           /* para data_t */
 #include "vetor_reservas.h" /* para vetor_reservas_t, e todos os procedimentos */
 
-int main()
-{
+int menu_principal();
+void input_nome(char* nome, size_t tamanho);
+
+int main() {
     vetor_reservas_t* arr = vetor_criar();
-    
     int menu;
     
     for (;;) {
-        printf("--- SISTEMA DE GERENCIAMENTO DE RESERVAS ---\n\n");
-        printf("\033[0;34m");
-        printf("1 - Cadastre uma nova reserva\n2 - Busque uma reserva\n3 - Remova uma reserva\n");
-        printf("4 - Liste as reservas\n5 - Ordene as reservas\n6 - Encerre o programa\n");
-        printf("\033[0m");
-        
-        scanf("%d", &menu);
-        getchar();
-
+		menu = menu_principal();
+		
         switch(menu) {
+			/* Cadastrar nova reserva */
             case 1: {
                 char nome[128];
                 int quarto;
                 data_t checkin;
                 int prio;
-
-                printf("\nInsira o nome do hospede: ");
-                fgets(nome, sizeof(nome), stdin);
-                if ((strlen(nome) > 0) && (nome[strlen (nome) - 1] == '\n'))
-                    nome[strlen (nome) - 1] = '\0';
+				
+				input_nome(nome, 128);
                 
                 printf("\nInsira o tipo do quarto (SINGLE = 0, DOUBLE = 1, SUITE = 2): ");
                 scanf("%d", &quarto);
@@ -51,7 +43,7 @@ int main()
                 vetor_adicionar(arr, nome, checkin, quarto, prio);
                 break;
             }
-            
+            /* Buscar reserva por ID */
             case 2: {
                 int search;
                 reserva_t* r;
@@ -80,7 +72,7 @@ int main()
                 }
                 break;
             }
-            
+            /* Remover reserva por ID */
             case 3: {
                 int removv;
 
@@ -116,4 +108,41 @@ int main()
     vetor_destruir(&arr);
     
     return 0;
+}
+
+/*
+ *  Menu de navegação do sistema.
+ *
+ *  Recebe:  void
+ *  Retorna: int 	(resposta do usuário)
+ */
+int
+menu_principal() {
+	int resposta;
+	
+	printf("--- SISTEMA DE GERENCIAMENTO DE RESERVAS ---\n\n");
+	printf("\033[0;34m");
+	printf("1 - Cadastre uma nova reserva\n2 - Busque uma reserva\n3 - Remova uma reserva\n");
+	printf("4 - Liste as reservas\n5 - Ordene as reservas\n6 - Encerre o programa\n");
+	printf("\033[0m");
+	
+	scanf("%d", &resposta);
+	getchar();
+	
+	return resposta;
+}
+
+/*
+ *  Recebe como input o nome do hóspede da nova reserva.
+ *
+ *  Recebe:  char* 	(cadeia de char para armazenar o nome)
+ *  Retorna: void
+ */
+void
+input_nome(char* nome, size_t tamanho) {
+	printf("\nInsira o nome do hospede: ");
+	fgets(nome, tamanho, stdin);
+	if ((strlen(nome) > 0) && (nome[strlen (nome) - 1] == '\n')) {
+		nome[strlen (nome) - 1] = '\0';
+	}
 }
