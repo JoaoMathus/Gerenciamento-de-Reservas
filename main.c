@@ -2,15 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "data.h"           /* para data_t */
+#include "data.h"           /* para data_t, testar_data_comparar() */
 #include "vetor_reservas.h" /* para vetor_reservas_t, e todos os procedimentos */
 
 int menu_principal();
 void input_nome(char* nome, size_t tamanho);
 
-int main() {
+int main(int argc, char* argv[]) {
     vetor_reservas_t* arr = vetor_criar();
     int menu;
+	
+	if (argc > 1) {
+		if (strcmp(argv[1], "--testar") == 0) {
+			testar_data_comparar();
+			exit(0);
+		}
+	}
     
     for (;;) {
 		menu = menu_principal();
